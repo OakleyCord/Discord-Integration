@@ -1,0 +1,6 @@
+name: DiscordIntegration
+version: ${project.version}
+main: com.oakleyplugins.discordintegration.DiscordIntegration
+author: OakleyCord
+api-version: 1.17
+description: §6§n§lAllows for players in Discord and Minecraft to chat with each other! Along with some other features!
