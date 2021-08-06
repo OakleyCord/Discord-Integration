@@ -1,5 +1,8 @@
 package com.oakleyplugins.discordintegration;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.oakleyplugins.discordintegration.DiscordCommands.DiscordCommand;
 import com.oakleyplugins.discordintegration.DiscordCommands.commands.CompletePlayTime;
 import com.oakleyplugins.discordintegration.DiscordCommands.commands.PlayerList;
@@ -14,7 +17,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -25,6 +34,7 @@ public final class DiscordIntegration extends JavaPlugin implements Listener {
     public static DiscordIntegration PLUGIN;
     public static TextChannel channel;
     public static boolean reconnecting = false;
+    private static BukkitTask versionCheck = null;
     public static Logger logger;
     public static HashMap<Player,Long> timeJoined;
 
@@ -33,11 +43,64 @@ public final class DiscordIntegration extends JavaPlugin implements Listener {
         PLUGIN = this;
         timeJoined = new HashMap<>();
         logger = getLogger();
+        versionCheck = Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN,this::checkVersion,0,144000);
         getServer().getPluginManager().registerEvents(new MCEvents(), this);
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         loadCommands();
         reconnect();
+    }
+
+    public @NotNull String checkVersionJson() throws Exception {
+        String url = "https://api.github.com/repos/HappyCord/Discord-Integration/releases/latest";
+        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+
+        con.setRequestMethod("GET");
+        con.setRequestProperty("application", "vnd.github.v3+json");
+        con.setConnectTimeout(5000);
+        con.setReadTimeout(5000);
+        con.setDoOutput(true);
+        String line;
+        StringBuilder output = new StringBuilder();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+        while ((line = in.readLine()) != null)
+            output.append(line);
+
+        in.close();
+        return output.toString();
+    }
+
+    public void checkVersion() {
+        logger.info("Checking Version...");
+        try{
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(checkVersionJson());
+            JsonObject obj = element.getAsJsonObject();
+            if(!obj.isJsonNull()){
+                if(obj.has("tag_name")){
+                    String version = obj.get("tag_name").getAsString();
+                    if(!version.equalsIgnoreCase(PLUGIN.getDescription().getVersion())){
+                        logger.info("========================");
+                        logger.info("");
+                        logger.info("New Version: " + version);
+                        if(obj.has("body")){
+                            String desc = obj.get("body").getAsString();
+                            logger.info("");
+                            logger.info("Description:");
+                            logger.info(desc);
+                            logger.info("");
+                        }
+                        logger.info("========================");
+                    } else {
+                        logger.info("No Updates Found!");
+                    }
+                }
+            }
+        } catch (Exception e){
+            logger.warning("An Error Occurred When Checking Send The Error Bellow To Oakley");
+            e.printStackTrace();
+        }
     }
 
     public void loadCommands(){
@@ -84,16 +147,16 @@ public final class DiscordIntegration extends JavaPlugin implements Listener {
         DiscordIntegration.channel = jda.getTextChannelById(channel);
         if(DiscordIntegration.channel == null) throw new Exception("Channel ID is Invalid!");
         jda.setAutoReconnect(true);
-        logger.info("Updating Commands...");
+        logger.info("Loading Commands...");
         jda.updateCommands().addCommands(DiscordCommand.getAllCommandData()).complete();
-        logger.info("Updated!");
-        logger.info("Registered Commands!");
+        logger.info("Loaded!");
         jda.addEventListener(new DiscordEvents());
     }
 
     @Override
     public void onDisable() {
         logger.warning("Disabling the bot may throw some errors but just ignore it");
+        versionCheck.cancel();
         try{
             jda.shutdown();
         } catch (Exception e) {

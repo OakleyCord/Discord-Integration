@@ -6,7 +6,7 @@
 
     <groupId>com.oakleyplugins</groupId>
     <artifactId>DiscordIntegration</artifactId>
-    <version>Release3.1.1</version>
+    <version>3.1.2</version>
     <packaging>jar</packaging>
 
     <name>DiscordIntegration</name>
