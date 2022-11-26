@@ -40,6 +40,7 @@ Example of the bot in action:
 - [ ]  Optimize Memory usage from JDA
 - [ ]  Optimize Plugin file size
 - [ ]  Add checks if discord goes offline or if the bot is kicked
+- [ ]  Add documentation for how to create and configure a discord bot
 
 # License
 This project is licensed under the MIT License - see the LICENSE file for details
