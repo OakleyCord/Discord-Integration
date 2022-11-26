@@ -1,3 +1,37 @@
-Token: "Put Discord bot token here"
-Channel: "Put id of channel of where bot is going to send messages to here"
+token: "" # Discord bot token
+channel: "" # Channel id
+serverAvatar: "https://i.ibb.co/SrTVRYY/2e4c6838faaf4dfc816a7801c032ff32.png" # Server avatar url for server messages
+serverName: "Server" # Server name for server messages
 
+webhook: "" # Webhook url, no need to configure, it will be automatically generated
+
+messages:
+  # %message% is the full message(e.g. "OakleyCord joined the game")
+  # %player% is the player name(e.g. "OakleyCord")
+  # %object% is certain parts of the message depending on the event(e.g. the advancement)
+
+  # %world% is the world name
+
+  # %onlineplayers% is the amount of players online(e.g. "1")
+  # %maxplayers% is the max amount of players(e.g. "20")
+  # %server% is the server name (set in server.properties)
+  # %motd% is the server motd (set in server.properties)
+
+  # you can also use discord markdown in the messages or use the discord emoji codes
+  # for server emojis you type \:emoji_name: in the discord server and copy and paste the content
+
+  # you can use bukkit color codes for discord to minecraft messages
+
+  # set to "" to disable
+  death: "%message%" # Player death
+  join: "%message%" # Players joining the world
+  advancement: "%message%" # Advancements player completed, %object% is the advancement name
+  broadcast: "%message%" # Broadcasts from other plugins
+  server: "%message%" # /Say command from the server
+  leave: "%message%" # Players leaving the world
+  chat: "%message%" # Players chatting
+
+  # discord messages to minecraft
+  discord: "[Discord] %author%: %message%" # Messages from discord to minecraft, %player% is the discord username and %message% is the message
+  reply: "[Discord] (replying to %reply%) %author%: %message%" # Messages from discord to minecraft, %author% is the discord username, %reply% the person getting replied, %message% is the message
+  highlightMessages: true # Highlight message replies from discord in minecraft chat
