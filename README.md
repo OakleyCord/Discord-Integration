@@ -41,6 +41,7 @@ Example of the bot in action:
 - [ ]  Optimize Plugin file size
 - [ ]  Add checks if discord goes offline or if the bot is kicked
 - [ ]  Add documentation for how to create and configure a discord bot
+- [ ]  Add fabric / forge support
 
 # License
 This project is licensed under the MIT License - see the LICENSE file for details
