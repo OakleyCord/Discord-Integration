@@ -1,4 +1,4 @@
-# Discord-Integration
+# Discord Integration
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M2CZ9B1)
 
 A highly customizable Discord bot for Paper servers.
