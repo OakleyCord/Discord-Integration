@@ -1,5 +1,5 @@
 name: DiscordIntegration
-version: ${project.version}
+version: ${version}
 main: dev.oakleycord.discordintegration.DiscordIntegration
 author: OakleyCord
 api-version: 1.19

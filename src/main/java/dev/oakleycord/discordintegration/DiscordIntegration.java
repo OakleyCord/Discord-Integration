@@ -4,7 +4,7 @@ import dev.oakleycord.discordintegration.commands.DiscordCommand;
 import dev.oakleycord.discordintegration.config.MessagesConfig;
 import dev.oakleycord.discordintegration.discord.ChatBot;
 import dev.oakleycord.discordintegration.events.MessageListener;
-import dev.oakleycord.discordintegration.messages.MessageFormatter;
+import dev.oakleycord.discordintegration.messages.PaperMessageFormatter;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +21,7 @@ public class DiscordIntegration extends JavaPlugin {
 
     private ChatBot chatBot;
     private MessagesConfig messagesConfig;
-    private MessageFormatter messageFormatter;
+    private PaperMessageFormatter messageFormatter;
 
     @Override
     public void onEnable() {
@@ -39,7 +39,7 @@ public class DiscordIntegration extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new MessageListener(chatBot, messageFormatter, this), this);
     }
 
-    public MessageFormatter getMessageFormatter() {
+    public PaperMessageFormatter getMessageFormatter() {
         return messageFormatter;
     }
 
@@ -52,7 +52,7 @@ public class DiscordIntegration extends JavaPlugin {
             return false;
         }
         this.messagesConfig = new MessagesConfig(config.section("messages"));
-        this.messageFormatter = new MessageFormatter(messagesConfig, this);
+        this.messageFormatter = new PaperMessageFormatter(messagesConfig, this);
         chatBot = new ChatBot(config, this);
         return chatBot.loaded();
     }

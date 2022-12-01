@@ -17,12 +17,12 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.jetbrains.annotations.Nullable;
 
 
-public class MessageFormatter {
+public class PaperMessageFormatter {
 
     private final MessagesConfig messagesConfig;
     private final DiscordIntegration main;
 
-    public MessageFormatter(MessagesConfig config, DiscordIntegration main) {
+    public PaperMessageFormatter(MessagesConfig config, DiscordIntegration main) {
         this.messagesConfig = config;
         this.main = main;
     }

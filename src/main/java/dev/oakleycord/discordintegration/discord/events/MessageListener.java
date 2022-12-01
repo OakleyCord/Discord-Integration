@@ -2,15 +2,16 @@ package dev.oakleycord.discordintegration.discord.events;
 
 import dev.oakleycord.discordintegration.DiscordIntegration;
 import dev.oakleycord.discordintegration.discord.ChatBot;
-import dev.oakleycord.discordintegration.messages.MessageFormatter;
+import dev.oakleycord.discordintegration.messages.PaperMessageFormatter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 public class MessageListener extends ListenerAdapter {
 
     private final ChatBot chatBot;
-    private final MessageFormatter formatter;
+    private final PaperMessageFormatter formatter;
     private final DiscordIntegration main;
 
     public MessageListener(ChatBot chatBot, DiscordIntegration main) {
@@ -20,7 +21,10 @@ public class MessageListener extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if(chatBot.getChatChannel() == null)
+            return;
+
         if (event.getChannel().getIdLong() != chatBot.getChatChannel().getIdLong())
             return;
 
