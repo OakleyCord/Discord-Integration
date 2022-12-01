@@ -16,10 +16,19 @@ repositories {
     maven {
         url = uri('https://repo.papermc.io/repository/maven-public/')
     }
-}   
+}
+
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
 
 group = 'dev.oakleycord'
-version = '2.0.0-INDEV'
+version = enviorment.equalsIgnoreCase("dev") ? getGitHash() :  version
 description = 'DiscordIntegration'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -27,6 +36,9 @@ configurations {
     embed
     compileOnly.extendsFrom embed
 }
+
+
+
 
 
 shadowJar {
@@ -59,16 +71,6 @@ processResources {
     }
 }
 
-
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
-
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
